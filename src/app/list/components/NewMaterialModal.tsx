@@ -1,5 +1,6 @@
-import React, { RefObject } from "react";
+import React, { RefObject,useState } from "react";
 import { Button } from "@/components/ui/button";
+import { supabase } from '@/lib/supabase'
 
 interface NewMaterialModalProps {
   open: boolean;
@@ -10,6 +11,7 @@ interface NewMaterialModalProps {
 }
 
 export function NewMaterialModal({ open, onClose, selectedFile, setSelectedFile, fileInputRef }: NewMaterialModalProps) {
+  const [uploading, setUploading] = useState(false)
   React.useEffect(() => {
     if (!open) return;
     function onKey(e: KeyboardEvent) {
@@ -20,9 +22,27 @@ export function NewMaterialModal({ open, onClose, selectedFile, setSelectedFile,
   }, [open, onClose]);
   if (!open) return null;
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files[0]) {
       setSelectedFile(e.target.files[0]);
+      let file = e.target.files[0]
+      setUploading(true)
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await res.json()
+      if (res.ok) {
+        alert(`上传成功：${data.url}`)
+      } else {
+        alert(`上传失败：${data.error}`)
+      }
+      setUploading(false)
+      onClose()
     }
   }
 
@@ -94,7 +114,7 @@ export function NewMaterialModal({ open, onClose, selectedFile, setSelectedFile,
           <input
             ref={fileInputRef}
             type="file"
-            accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,audio/*"
+            accept=".pages,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,audio/*"
             className="hidden"
             onChange={handleFileChange}
             multiple={false}
