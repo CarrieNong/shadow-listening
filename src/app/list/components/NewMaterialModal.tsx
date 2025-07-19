@@ -1,6 +1,5 @@
 import React, { RefObject,useState } from "react";
 import { Button } from "@/components/ui/button";
-import { supabase } from '@/lib/supabase'
 
 interface NewMaterialModalProps {
   open: boolean;
@@ -37,7 +36,7 @@ export function NewMaterialModal({ open, onClose, selectedFile, setSelectedFile,
 
       const data = await res.json()
       if (res.ok) {
-        alert(`上传成功：${data.url}`)
+        alert(`上传成功：${data.message}`)
       } else {
         alert(`上传失败：${data.error}`)
       }
@@ -114,7 +113,7 @@ export function NewMaterialModal({ open, onClose, selectedFile, setSelectedFile,
           <input
             ref={fileInputRef}
             type="file"
-            accept=".pages,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,audio/*"
+            accept=".txt,.pdf,.doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,audio/*"
             className="hidden"
             onChange={handleFileChange}
             multiple={false}
