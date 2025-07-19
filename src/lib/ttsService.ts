@@ -92,16 +92,16 @@ export async function convertFileToSpeech({
       extractedText = fileBuffer.toString('utf8');
       break;
     case 'application/pdf': // .pdf
-        console.log('TTS Service: Extracting text from PDF using pdf-extraction...');
-        try {
+      console.log('TTS Service: Extracting text from PDF using pdf-extraction...');
+      try {
         // pdf-extraction directly takes a Buffer
         const data = await extract(fileBuffer);
         extractedText = data.text;
-        } catch (pdfError: any) {
+      } catch (pdfError: any) {
         console.error('TTS Service: PDF parsing error:', pdfError);
         throw new Error(`Failed to extract text from PDF: ${pdfError.message}.`);
-        }
-        break;
+      }
+      break;
     case 'application/msword':
       throw new Error(`.doc (older Word) files are not directly supported for text extraction. Please convert "${fileName}" to .docx or PDF and re-upload.`);
     default:
