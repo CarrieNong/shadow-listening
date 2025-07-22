@@ -167,7 +167,7 @@ export async function convertFileToSpeech({
       original_file_id: fileId,
       original_file_url: fileUrl,
       original_file_name: fileName,
-      extracted_text_preview: extractedText.substring(0, 500) + (extractedText.length > 500 ? '...' : ''),
+      extracted_text_preview: extractedText,
       audio_url: publicAudioUrl,
       voice_name: voiceName,
       language_code: languageCode,

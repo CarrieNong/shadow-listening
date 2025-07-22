@@ -51,7 +51,7 @@ export default function DetailPage() {
         <div className="flex-1 flex flex-col md:flex-row gap-8 min-h-0">
           {/* Original Text */}
           <div className="flex-1 bg-background rounded-lg p-6 shadow-sm flex flex-col min-h-0">
-            <div className="text-base text-foreground whitespace-pre-line leading-relaxed overflow-auto h-full">
+            <div className="text-base text-foreground whitespace-pre-line leading-relaxed overflow-scroll max-h-[500px]">
               {speech?.extracted_text_preview}
             </div>
           </div>
