@@ -1,22 +1,25 @@
 "use client"
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { NewMaterialModal } from "./components/NewMaterialModal";
 
-const materials = [
-  { title: "Project Proposal", date: "2023-11-15", status: "proofreaded", actions: ["Edit", "Delete"] },
-  { title: "Marketing Plan", date: "2023-11-10", status: "listening", actions: ["Edit", "Delete"] },
-  { title: "Sales Report", date: "2023-11-05", status: "proofreaded", actions: ["Edit"] },
-  { title: "Customer Survey", date: "2023-10-30", status: "listening", actions: ["Edit"] },
-  { title: "Training Manual", date: "2023-10-25", status: "proofreaded", actions: ["Edit"] },
-];
+type FileItem = {
+  id: string, original_file_name: string, audio_url: string, created_at: string, extracted_text_preview: string,status:string
+};
 
 export default function ListPage() {
+  const [fileList, setFileList] = useState<FileItem[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetch('/api/get-audio-list')
+      .then(res => res.json())
+      .then(setFileList);
+  }, []);
 
   return (
     <div className="min-h-screen bg-muted flex">
@@ -59,32 +62,28 @@ export default function ListPage() {
               </tr>
             </thead>
             <tbody>
-              {materials.map((m, i) => (
+              {fileList.map((m, i) => (
                 <tr key={i} className="border-b last:border-b-0">
                   <td className="py-3 px-4">
-                    <Link href="/detail" className="text-blue-600 hover:underline cursor-pointer">{m.title}</Link>
+                    <Link href="/detail" className="text-blue-600 hover:underline cursor-pointer">{m.original_file_name}</Link>
                   </td>
-                  <td className="py-3 px-4 text-blue-500">{m.date}</td>
+                  <td className="py-3 px-4 text-blue-500">{m.created_at}</td>
                   <td className="py-3 px-4">
                     <span className="rounded-full bg-muted px-3 py-1 text-sm font-medium">
                       {m.status}
                     </span>
                   </td>
                   <td className="py-3 px-4 flex gap-2">
-                    {m.actions.map((action) => (
-                      <Link key={action} href="/detail" className="text-blue-600 hover:underline cursor-pointer">
-                        <Button
-                          variant={action === "Delete" ? "ghost" : "outline"}
-                          className={
-                            action === "Delete"
-                              ? "text-destructive hover:bg-destructive/10"
-                              : ""
-                          }
-                        >
-                          {action}
-                        </Button>
-                      </Link>
-                    ))}
+                    <Link key="Edit" href="/detail" className="text-blue-600 hover:underline cursor-pointer">
+                      <Button variant="outline"
+                      >
+                        Edit
+                      </Button>
+                    </Link>
+                    <Button  variant="ghost"
+                    >
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               ))}

@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 export async function GET() {
     const { data, error } = await supabase
         .from('speech_recordings')
-        .select('id, title, file_name,original_text, audio_url,created_at,extracted_text_preview')
+        .select('id, original_file_name, audio_url,created_at,extracted_text_preview,status')
         .order('created_at', { ascending: false });
 
     if (error) {
