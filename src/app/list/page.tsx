@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { NewMaterialModal } from "./components/NewMaterialModal";
 
 type FileItem = {
-  id: string, original_file_name: string, audio_url: string, created_at: string, extracted_text_preview: string,status:string
+  id: string, original_file_name: string, created_at: string,status:string
 };
 
 export default function ListPage() {
@@ -65,7 +65,7 @@ export default function ListPage() {
               {fileList.map((m, i) => (
                 <tr key={i} className="border-b last:border-b-0">
                   <td className="py-3 px-4">
-                    <Link href="/detail" className="text-blue-600 hover:underline cursor-pointer">{m.original_file_name}</Link>
+                    <Link href={`/detail/${m.id}`} className="text-blue-600 hover:underline cursor-pointer">{m.original_file_name}</Link>
                   </td>
                   <td className="py-3 px-4 text-blue-500">{m.created_at}</td>
                   <td className="py-3 px-4">
